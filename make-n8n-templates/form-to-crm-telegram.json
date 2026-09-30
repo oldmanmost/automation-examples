@@ -1,0 +1,48 @@
+{
+  "name": "Форма сайта → Bitrix24 + Telegram уведомление",
+  "description": "Автоматизация: новая заявка с сайта создаёт лид в CRM и отправляет мгновенное уведомление менеджеру в Telegram.",
+  "workflow": {
+    "trigger": {
+      "module": "webhook:IncomingWebhook",
+      "label": "1. Webhook: Новая заявка с сайта",
+      "description": "Принимает POST-запрос с данными формы (name, phone, email, message)"
+    },
+    "actions": [
+      {
+        "module": "bitrix24:CreateLead",
+        "label": "2. Создать лид в Bitrix24",
+        "params": {
+          "TITLE": "Заявка с сайта: {{1.name}}",
+          "NAME": "{{1.name}}",
+          "PHONE": "{{1.phone}}",
+          "EMAIL": "{{1.email}}",
+          "COMMENTS": "{{1.message}}",
+          "SOURCE_ID": "WEB"
+        }
+      },
+      {
+        "module": "telegram:SendMessage",
+        "label": "3. Уведомление менеджеру в Telegram",
+        "params": {
+          "chat_id": "МЕНЕДЖЕР_CHAT_ID",
+          "text": "🔔 Новая заявка!\n\n👤 {{1.name}}\n📞 {{1.phone}}\n📧 {{1.email}}\n💬 {{1.message}}\n\n🆔 Лид в CRM: #{{2.result.ID}}"
+        }
+      },
+      {
+        "module": "http:Response",
+        "label": "4. Ответ сайту: OK",
+        "params": {
+          "statusCode": 200,
+          "body": "{\"status\": \"ok\", \"message\": \"Заявка успешно обработана\"}"
+        }
+      }
+    ]
+  },
+  "setup_instructions": [
+    "1. Создайте Webhook в Make/n8n и скопируйте URL.",
+    "2. Вставьте URL в action формы на вашем сайте (Tilda, WordPress и т.д.).",
+    "3. Подключите аккаунт Bitrix24 (или замените модуль на AmoCRM).",
+    "4. Создайте Telegram Bot через @BotFather и получите chat_id менеджера.",
+    "5. Активируйте сценарий и протестируйте отправку формы."
+  ]
+}
