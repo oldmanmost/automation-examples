@@ -9,7 +9,7 @@
 - **Технологии:** Python, Aiogram 3.x, Google Sheets API (gspread).
 - **Время внедрения:** ~1 день.
 
-### 2. [Make / n8n Templates](./make-n8n-templates) *(в процессе добавления)*
+### 2. [Make / n8n Templates](./make-n8n-templates)
 Готовые JSON-шаблоны рабочих процессов (workflows) для визуальных платформ автоматизации: форма на сайте → CRM → уведомление в Telegram.
 
 ---
